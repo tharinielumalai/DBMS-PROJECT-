@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hostel Luggage Management</title>
+<style>
+:root{--navy:#14213d;--blue:#2563eb;--pale:#eef4ff;--ink:#182230;--muted:#667085;--line:#e4e7ec;--green:#15803d;--amber:#b45309}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#f5f7fb;color:var(--ink)}
+header{background:linear-gradient(120deg,#14213d,#1d4ed8);color:white;padding:25px max(22px,calc((100% - 1180px)/2));display:flex;align-items:center;justify-content:space-between;gap:20px}
+.brand{display:flex;align-items:center;gap:13px}.logo{width:46px;height:46px;border-radius:14px;background:#ffffff20;display:grid;place-items:center;font-size:25px}.brand h1{font-size:21px;margin:0}.brand p{margin:4px 0 0;color:#dbeafe;font-size:13px}.pill{border:1px solid #ffffff55;border-radius:999px;padding:8px 12px;font-size:12px}
+main{max-width:1180px;margin:26px auto;padding:0 20px}.intro{display:flex;justify-content:space-between;align-items:end;gap:18px;margin-bottom:20px}.intro h2{font-size:25px;margin:0 0 7px}.intro p{color:var(--muted);margin:0}.demo{background:#fff7ed;color:#9a3412;border:1px solid #fed7aa;border-radius:10px;padding:10px 13px;font-size:12px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}.stat,.panel{background:white;border:1px solid var(--line);border-radius:15px;box-shadow:0 3px 12px #10182808}.stat{padding:17px}.stat span{font-size:12px;color:var(--muted)}.stat strong{display:block;font-size:27px;margin-top:8px}.layout{display:grid;grid-template-columns:1.05fr 1.4fr;gap:18px}.panel{padding:20px;margin-bottom:18px}.panel h3{font-size:17px;margin:0 0 17px}.field{margin-bottom:13px}.field label{display:block;font-size:12px;font-weight:650;margin-bottom:6px}.field input,.field select{width:100%;padding:11px 12px;border:1px solid #d0d5dd;border-radius:9px;background:white;font:inherit;font-size:14px}.btn{border:0;border-radius:9px;padding:11px 14px;font-weight:650;cursor:pointer;background:var(--blue);color:white}.btn:hover{filter:brightness(.94)}.btn.secondary{background:#eaf0ff;color:#1d4ed8}.btn.small{padding:7px 10px;font-size:12px}.rowbtn{display:flex;gap:9px;flex-wrap:wrap}.tablewrap{overflow:auto}table{width:100%;border-collapse:collapse;font-size:13px}th,td{text-align:left;padding:12px 9px;border-bottom:1px solid var(--line);white-space:nowrap}th{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.04em}tbody tr:last-child td{border-bottom:0}.status{display:inline-block;border-radius:999px;padding:5px 8px;font-size:11px;font-weight:700}.available{background:#dcfce7;color:#166534}.occupied{background:#fee2e2;color:#991b1b}.maintenance{background:#fef3c7;color:#92400e}.notice{display:none;padding:12px 14px;border-radius:10px;margin-bottom:15px;font-size:13px}.notice.show{display:block}.notice.ok{background:#dcfce7;color:#166534}.notice.err{background:#fee2e2;color:#991b1b}.empty{color:var(--muted);padding:18px 0;text-align:center;font-size:13px}.footer{text-align:center;color:var(--muted);font-size:12px;padding:8px 0 30px}
+@media(max-width:850px){.layout{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,1fr)}header{align-items:flex-start}.pill{display:none}.intro{align-items:flex-start;flex-direction:column}}@media(max-width:480px){.stats{gap:8px}.stat{padding:13px}.stat strong{font-size:23px}.panel{padding:15px}.brand h1{font-size:17px}}
+</style>
+</head>
+<body>
+<header><div class="brand"><div class="logo">🧳</div><div><h1>Hostel Luggage Management</h1><p>Smart storage · Slot allocation · Secure retrieval</p></div></div><div class="pill">STUDENT & WARDEN PORTAL</div></header>
+<main>
+<section class="intro"><div><h2>Storage dashboard</h2><p>Register luggage and manage hostel storage slots.</p></div><div class="demo">DEMO MODE · Data is stored in this browser only</div></section>
+<div id="notice" class="notice"></div>
+<section class="stats">
+<div class="stat"><span>Total storage slots</span><strong id="totalSlots">10</strong></div>
+<div class="stat"><span>Available slots</span><strong id="availableSlots">10</strong></div>
+<div class="stat"><span>Stored luggage</span><strong id="storedCount">0</strong></div>
+<div class="stat"><span>Registered items</span><strong id="itemCount">0</strong></div>
+</section>
+<div class="layout">
+<div>
+<section class="panel"><h3>Register luggage</h3>
+<form id="luggageForm">
+<div class="field"><label for="student">Student</label><select id="student" required><option value="1">Ritesh (ritesh@example.com)</option><option value="2">Tharini (tharini@example.com)</option><option value="3">Kaushik (kaushik@example.com)</option></select></div>
+<div class="field"><label for="description">Luggage description</label><input id="description" required maxlength="120" placeholder="e.g. Black medium suitcase"></div>
+<div class="field"><label for="tag">Unique luggage tag</label><input id="tag" required maxlength="30" placeholder="e.g. LUG-1001"></div>
+<button class="btn" type="submit">Register luggage</button>
+</form></section>
+<section class="panel"><h3>Warden · Allocate a slot</h3>
+<form id="allocationForm">
+<div class="field"><label for="luggageSelect">Registered luggage</label><select id="luggageSelect" required></select></div>
+<div class="field"><label for="slotSelect">Available storage slot</label><select id="slotSelect" required></select></div>
+<div class="rowbtn"><button class="btn" type="submit">Allocate slot</button><button class="btn secondary" type="button" id="resetDemo">Reset demo data</button></div>
+</form></section>
+</div>
+<div>
+<section class="panel"><h3>Luggage register</h3><div class="tablewrap"><table><thead><tr><th>Tag</th><th>Student</th><th>Description</th><th>Status</th><th>Action</th></tr></thead><tbody id="luggageRows"></tbody></table></div><div id="emptyLuggage" class="empty">No luggage registered yet.</div></section>
+<section class="panel"><h3>Storage slot status</h3><div class="tablewrap"><table><thead><tr><th>Slot</th><th>Location</th><th>Status</th></tr></thead><tbody id="slotRows"></tbody></table></div></section>
+<section class="panel"><h3>Allocation history</h3><div class="tablewrap"><table><thead><tr><th>Tag</th><th>Slot</th><th>Allocated at</th><th>Status</th><th>Action</th></tr></thead><tbody id="allocationRows"></tbody></table></div><div id="emptyAllocations" class="empty">No allocations yet.</div></section>
+</div>
+</div>
+</main>
+<div class="footer">Hostel Luggage Management & Slot Allocation System · Academic project prototype</div>
+<script>
+const students=[{id:1,name:"Ritesh",email:"ritesh@example.com"},{id:2,name:"Tharini",email:"tharini@example.com"},{id:3,name:"Kaushik",email:"kaushik@example.com"}];
+const initialSlots=()=>["A01","A02","A03","A04","A05","B01","B02","B03","B04","B05"].map((code,i)=>({id:i+1,code,location:i<5?"Storage Room A":"Storage Room B",status:"AVAILABLE"}));
+let slots=initialSlots(),items=[],allocations=[],nextId=1;
+const $=id=>document.getElementById(id);
+function notice(msg,type="ok"){const n=$("notice");n.textContent=msg;n.className="notice show "+(type==="err"?"err":"ok");window.scrollTo({top:0,behavior:"smooth"});}
+function studentName(id){return students.find(s=>s.id===Number(id))?.name||"Unknown";}
+function activeFor(itemId){return allocations.find(a=>a.itemId===itemId&&a.status==="ACTIVE");}
+function render(){
+$("totalSlots").textContent=slots.length;$("availableSlots").textContent=slots.filter(s=>s.status==="AVAILABLE").length;
+$("storedCount").textContent=allocations.filter(a=>a.status==="ACTIVE").length;$("itemCount").textContent=items.filter(i=>i.status!=="RETRIEVED").length;
+$("luggageRows").innerHTML=items.map(i=>`<tr><td>${escapeHtml(i.tag)}</td><td>${studentName(i.userId)}</td><td>${escapeHtml(i.description)}</td><td>${statusBadge(i.status)}</td><td>${i.status==="RETRIEVED"?"—":`<button class="btn secondary small" onclick="retrieveItem(${i.id})">Retrieve</button>`}</td></tr>`).join("");
+$("emptyLuggage").style.display=items.length?"none":"block";
+$("slotRows").innerHTML=slots.map(s=>`<tr><td><b>${s.code}</b></td><td>${s.location}</td><td>${statusBadge(s.status)}</td></tr>`).join("");
+$("allocationRows").innerHTML=allocations.slice().reverse().map(a=>{const i=items.find(i=>i.id===a.itemId),s=slots.find(s=>s.id===a.slotId);return `<tr><td>${i?escapeHtml(i.tag):"—"}</td><td>${s?s.code:"—"}</td><td>${a.time}</td><td>${statusBadge(a.status)}</td><td>${a.status==="ACTIVE"?`<button class="btn secondary small" onclick="releaseAllocation(${a.id})">Release</button>`:"—"}</td></tr>`}).join("");
+$("emptyAllocations").style.display=allocations.length?"none":"block";
+$("luggageSelect").innerHTML=items.filter(i=>i.status==="REGISTERED"&&!activeFor(i.id)).map(i=>`<option value="${i.id}">${escapeHtml(i.tag)} — ${studentName(i.userId)}</option>`).join("");
+if(!$("luggageSelect").options.length)$("luggageSelect").innerHTML='<option value="">No unallocated registered luggage</option>';
+$("slotSelect").innerHTML=slots.filter(s=>s.status==="AVAILABLE").map(s=>`<option value="${s.id}">${s.code} — ${s.location}</option>`).join("");
+if(!$("slotSelect").options.length)$("slotSelect").innerHTML='<option value="">No available slots</option>';
+}
+function statusBadge(status){const cls=status==="AVAILABLE"||status==="REGISTERED"?"available":status==="MAINTENANCE"?"maintenance":status==="ACTIVE"||status==="STORED"?"occupied":status==="RELEASED"||status==="RETRIEVED"?"available":"maintenance";return `<span class="status ${cls}">${status}</span>`;}
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+$("luggageForm").addEventListener("submit",e=>{e.preventDefault();const userId=Number($("student").value),description=$("description").value.trim(),tag=$("tag").value.trim();if(!description||!tag)return notice("Enter a description and a unique tag code.","err");if(items.some(i=>i.tag.toLowerCase()===tag.toLowerCase()))return notice("That tag code already exists. Use a unique tag.","err");if(items.filter(i=>i.userId===userId&&i.status!=="RETRIEVED").length>=5)return notice("Limit reached: a student can have at most five active luggage items.","err");items.push({id:nextId++,userId,description,tag,status:"REGISTERED"});e.target.reset();render();notice("Luggage registered successfully.");});
+$("allocationForm").addEventListener("submit",e=>{e.preventDefault();const itemId=Number($("luggageSelect").value),slotId=Number($("slotSelect").value),item=items.find(i=>i.id===itemId),slot=slots.find(s=>s.id===slotId);if(!item||!slot)return notice("Choose registered luggage and an available slot.","err");if(slot.status!=="AVAILABLE")return notice("That slot is no longer available.","err");if(activeFor(itemId))return notice("This luggage already has an active allocation.","err");allocations.push({id:nextId++,itemId,slotId,status:"ACTIVE",time:new Date().toLocaleString()});slot.status="OCCUPIED";item.status="STORED";render();notice(`Slot ${slot.code} allocated to ${item.tag}.`);});
+function retrieveItem(id){const item=items.find(i=>i.id===id);if(!item)return;if(item.status==="STORED"){const a=activeFor(id);if(a)releaseAllocation(a.id);return;}item.status="RETRIEVED";render();notice("Luggage marked as retrieved.");}
+function releaseAllocation(id){const a=allocations.find(a=>a.id===id&&a.status==="ACTIVE");if(!a)return;a.status="RELEASED";const slot=slots.find(s=>s.id===a.slotId);if(slot)slot.status="AVAILABLE";const item=items.find(i=>i.id===a.itemId);if(item)item.status="RETRIEVED";render();notice("Allocation released. The slot is available again.");}
+$("resetDemo").addEventListener("click",()=>{if(!confirm("Clear all demo registrations and allocations?"))return;slots=initialSlots();items=[];allocations=[];nextId=1;render();notice("Demo data reset.");});
+render();
+</script>
+</body>
+</html>
